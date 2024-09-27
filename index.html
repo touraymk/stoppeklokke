@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Variabler nivå to</title>
+    <style>
+      .container {
+        padding: 40px;
+        width: 220px;
+        background-color: silver;
+        color: antiquewhite;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-container {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
+
+      .btn-container > button {
+        border-radius: 40%;
+        vertical-align: middle;
+        font-size: x-large;
+        border: 2px solid darkgray;
+        cursor: pointer;
+      }
+      .output-container {
+        margin: 20px;
+        text-align: center;
+      }
+      .output {
+        line-height: 40px;
+        font-size: xx-large;
+        padding-bottom: 20px;
+      }
+      h1 {
+        font-size: medium;
+        margin: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script>
+      /*Lag en stoppeklokke.
+                Begynn med å lage én knapp som setter i gang tiden -
+                 tiden lagres i en variabel, og vises fram i nettleseren.
+                Lag så en knapp for å ta "rundetider" - altså at du
+                lagrer og viser tiden i dét du trykker på pauseknappen,
+                samtidig som tidtakeren stiller seg tilbake på 0 og
+                begynner på nytt.
+                Lag en knapp for å blanke ut og stoppe klokka og timeren.*/
+      let timer;
+      let laps = [];
+      let seconds = 0;
+      let pausedTime;
+      console.log(seconds);
+
+      updateView();
+      function updateView() {
+        document.getElementById("app").innerHTML = /*html*/ `
+          <div class="container">
+            <h1>Stoppeklokke⏱️</h1>
+            <div class="btn-container">
+              <button onclick="startTimer()">&#9205</button>
+              <button onclick="pauseTimer()">&#9208</button>
+              <button onclick="stopTimer()">&#9209</button>
+            </div>
+            <div class="output-container">
+              <div id="output">${seconds}</div>
+              <div id="lapContainer">
+                <ul id="lastLap"></ul>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function updateClock() {
+        seconds++;
+        updateView();
+      }
+
+      function startTimer() {
+        timer = setInterval(updateClock, 1000);
+        updateView();
+      }
+
+      function pauseTimer() {
+        pausedTime = seconds;
+        clearInterval(timer);
+        displayLastLap(pausedTime);
+        seconds = 0;
+      }
+
+      function displayLastLap(pausedTime) {
+        const newLap = document.createElement("li");
+        const lapList = document.getElementById("lastLap");
+        newLap.innerText = pausedTime;
+        lapList.appendChild(newLap);
+      }
+
+      function stopTimer() {
+        clearInterval(timer);
+        seconds = 0;
+        updateView();
+      }
+    </script>
+  </body>
+</html>
